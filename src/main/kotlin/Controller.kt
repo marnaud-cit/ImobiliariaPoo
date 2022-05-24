@@ -14,13 +14,26 @@ object Controller{
                             endereco: Endereco
     ){
 
-        adicionaImovel(Apartamento(nome,contato,endereco,area,quartos,vagaGaragem,tipoNegocio,valor))
+        val validador = verificaEndereco(listaImoveis,endereco)
+        if(validador){
+            adicionaImovel(Apartamento(nome,contato,endereco,area,quartos,vagaGaragem,tipoNegocio,valor))
+        }else{
+            println("Cadastro não efetuado pois enndereço ja foi cadastrado")
+        }
+
     }
     @JvmStatic
     fun cadastraCasa(nome: String, contato: String,
                      endereco: Endereco, areaConstruida:Double,
                      areaTotal:Double, quartos: Int, tipoNegocio: Int){
-        adicionaImovel(Casa(nome,contato,endereco, areaConstruida,areaTotal,quartos,tipoNegocio ))
+
+        val validador = verificaEndereco(listaImoveis,endereco)
+
+        if(validador){
+            adicionaImovel(Casa(nome,contato,endereco, areaConstruida,areaTotal,quartos,tipoNegocio ))
+        }
+
+        println("Cadastro não efetuado pois enndereço ja foi cadastrado")
     }
 
     @JvmStatic
@@ -49,6 +62,10 @@ object Controller{
         val listaFiltrada = listaImoveis.filter {  it.nome == nome}
     }
 
+    fun verificaEndereco(listaImovel: List<Imovel>,endereco: Endereco): Boolean{
+        listaImovel.filter { imovel -> imovel.endereco == endereco  }
+        return listaImoveis.isEmpty()
+    }
     @JvmStatic
     private fun adicionaImovel(imovel: Imovel){
         listaImoveis.add(imovel)
