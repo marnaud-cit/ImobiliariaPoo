@@ -1,5 +1,6 @@
 import Model.*
 
+
 object Controller{
     private val listaImoveis: MutableList<Imovel> = arrayListOf()
 
@@ -8,40 +9,14 @@ object Controller{
         return Endereco(rua,cep,referecia)
     }
     @JvmStatic
-    fun cadastraApartamento(nome:String,contato:String,
-                            area:Double, quartos:Int,
-                            vagaGaragem:Int, tipoNegocio:Int,valor:Double,
-                            endereco: Endereco
-    ){
-
-        val validador = verificaEndereco(listaImoveis,endereco)
-        if(validador){
-            adicionaImovel(Apartamento(nome,contato,endereco,area,quartos,vagaGaragem,tipoNegocio,valor))
+    fun cadastraImovel(imovel: Imovel){
+        if(verificaEndereco(listaImoveis,imovel.endereco)){
+            adicionaImovel(imovel)
         }else{
             println("Cadastro não efetuado pois enndereço ja foi cadastrado")
         }
 
     }
-    @JvmStatic
-    fun cadastraCasa(nome: String, contato: String,
-                     endereco: Endereco, areaConstruida:Double,
-                     areaTotal:Double, quartos: Int, tipoNegocio: Int){
-
-        val validador = verificaEndereco(listaImoveis,endereco)
-
-        if(validador){
-            adicionaImovel(Casa(nome,contato,endereco, areaConstruida,areaTotal,quartos,tipoNegocio ))
-        }
-
-        println("Cadastro não efetuado pois enndereço ja foi cadastrado")
-    }
-
-    @JvmStatic
-    fun cadastraTerreno(nome:String, contato: String, endereco: Endereco,
-                        areaTotal: Double, tipoNegocio: Int, valor: Double){
-        adicionaImovel(Terreno(nome, contato, endereco, areaTotal, tipoNegocio, valor))
-    }
-
     @JvmStatic
     fun filtraApartamento():List<Imovel>{
         return listaImoveis.filterIsInstance<Apartamento>()
@@ -51,8 +26,6 @@ object Controller{
     fun filtraCasa(): List<Imovel> {
         return listaImoveis.filterIsInstance<Casa>()
     }
-
-
     @JvmStatic
     fun filtraTerreno():List<Imovel>{
         return listaImoveis.filterIsInstance<Terreno>()
@@ -63,8 +36,13 @@ object Controller{
     }
 
     fun verificaEndereco(listaImovel: List<Imovel>,endereco: Endereco): Boolean{
-        listaImovel.filter { imovel -> imovel.endereco == endereco  }
-        return listaImoveis.isEmpty()
+        val imovel = listaImovel.find { imovel -> imovel.endereco == endereco   }
+
+        if (imovel != null) {
+            return false
+        }
+        println("estoy aca $imovel")
+        return true
     }
     @JvmStatic
     private fun adicionaImovel(imovel: Imovel){
